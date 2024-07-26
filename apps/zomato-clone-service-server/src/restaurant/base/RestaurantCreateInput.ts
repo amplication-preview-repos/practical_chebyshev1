@@ -9,5 +9,104 @@ https://docs.amplication.com/how-to/custom-code
 
 ------------------------------------------------------------------------------
   */
-class RestaurantCreateInput {}
+import { InputType, Field } from "@nestjs/graphql";
+import { ApiProperty } from "@nestjs/swagger";
+import {
+  IsString,
+  MaxLength,
+  IsOptional,
+  ValidateNested,
+} from "class-validator";
+import { MenuCreateNestedManyWithoutRestaurantsInput } from "./MenuCreateNestedManyWithoutRestaurantsInput";
+import { Type } from "class-transformer";
+import { ReviewCreateNestedManyWithoutRestaurantsInput } from "./ReviewCreateNestedManyWithoutRestaurantsInput";
+import { OrderCreateNestedManyWithoutRestaurantsInput } from "./OrderCreateNestedManyWithoutRestaurantsInput";
+
+@InputType()
+class RestaurantCreateInput {
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  address?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  phone?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  owner?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  name?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => MenuCreateNestedManyWithoutRestaurantsInput,
+  })
+  @ValidateNested()
+  @Type(() => MenuCreateNestedManyWithoutRestaurantsInput)
+  @IsOptional()
+  @Field(() => MenuCreateNestedManyWithoutRestaurantsInput, {
+    nullable: true,
+  })
+  menus?: MenuCreateNestedManyWithoutRestaurantsInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => ReviewCreateNestedManyWithoutRestaurantsInput,
+  })
+  @ValidateNested()
+  @Type(() => ReviewCreateNestedManyWithoutRestaurantsInput)
+  @IsOptional()
+  @Field(() => ReviewCreateNestedManyWithoutRestaurantsInput, {
+    nullable: true,
+  })
+  reviews?: ReviewCreateNestedManyWithoutRestaurantsInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => OrderCreateNestedManyWithoutRestaurantsInput,
+  })
+  @ValidateNested()
+  @Type(() => OrderCreateNestedManyWithoutRestaurantsInput)
+  @IsOptional()
+  @Field(() => OrderCreateNestedManyWithoutRestaurantsInput, {
+    nullable: true,
+  })
+  orders?: OrderCreateNestedManyWithoutRestaurantsInput;
+}
+
 export { RestaurantCreateInput as RestaurantCreateInput };

@@ -29,11 +29,28 @@ export class MenuControllerBase {
   @swagger.ApiCreatedResponse({ type: Menu })
   async createMenu(@common.Body() data: MenuCreateInput): Promise<Menu> {
     return await this.service.createMenu({
-      data: data,
+      data: {
+        ...data,
+
+        restaurant: data.restaurant
+          ? {
+              connect: data.restaurant,
+            }
+          : undefined,
+      },
       select: {
         id: true,
         createdAt: true,
         updatedAt: true,
+        itemName: true,
+        description: true,
+        price: true,
+
+        restaurant: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
   }
@@ -49,6 +66,15 @@ export class MenuControllerBase {
         id: true,
         createdAt: true,
         updatedAt: true,
+        itemName: true,
+        description: true,
+        price: true,
+
+        restaurant: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
   }
@@ -65,6 +91,15 @@ export class MenuControllerBase {
         id: true,
         createdAt: true,
         updatedAt: true,
+        itemName: true,
+        description: true,
+        price: true,
+
+        restaurant: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
     if (result === null) {
@@ -85,11 +120,28 @@ export class MenuControllerBase {
     try {
       return await this.service.updateMenu({
         where: params,
-        data: data,
+        data: {
+          ...data,
+
+          restaurant: data.restaurant
+            ? {
+                connect: data.restaurant,
+              }
+            : undefined,
+        },
         select: {
           id: true,
           createdAt: true,
           updatedAt: true,
+          itemName: true,
+          description: true,
+          price: true,
+
+          restaurant: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
     } catch (error) {
@@ -115,6 +167,15 @@ export class MenuControllerBase {
           id: true,
           createdAt: true,
           updatedAt: true,
+          itemName: true,
+          description: true,
+          price: true,
+
+          restaurant: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
     } catch (error) {

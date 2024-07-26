@@ -22,6 +22,15 @@ import { Restaurant } from "./Restaurant";
 import { RestaurantFindManyArgs } from "./RestaurantFindManyArgs";
 import { RestaurantWhereUniqueInput } from "./RestaurantWhereUniqueInput";
 import { RestaurantUpdateInput } from "./RestaurantUpdateInput";
+import { MenuFindManyArgs } from "../../menu/base/MenuFindManyArgs";
+import { Menu } from "../../menu/base/Menu";
+import { MenuWhereUniqueInput } from "../../menu/base/MenuWhereUniqueInput";
+import { ReviewFindManyArgs } from "../../review/base/ReviewFindManyArgs";
+import { Review } from "../../review/base/Review";
+import { ReviewWhereUniqueInput } from "../../review/base/ReviewWhereUniqueInput";
+import { OrderFindManyArgs } from "../../order/base/OrderFindManyArgs";
+import { Order } from "../../order/base/Order";
+import { OrderWhereUniqueInput } from "../../order/base/OrderWhereUniqueInput";
 
 export class RestaurantControllerBase {
   constructor(protected readonly service: RestaurantService) {}
@@ -36,6 +45,10 @@ export class RestaurantControllerBase {
         id: true,
         createdAt: true,
         updatedAt: true,
+        address: true,
+        phone: true,
+        owner: true,
+        name: true,
       },
     });
   }
@@ -51,6 +64,10 @@ export class RestaurantControllerBase {
         id: true,
         createdAt: true,
         updatedAt: true,
+        address: true,
+        phone: true,
+        owner: true,
+        name: true,
       },
     });
   }
@@ -67,6 +84,10 @@ export class RestaurantControllerBase {
         id: true,
         createdAt: true,
         updatedAt: true,
+        address: true,
+        phone: true,
+        owner: true,
+        name: true,
       },
     });
     if (result === null) {
@@ -92,6 +113,10 @@ export class RestaurantControllerBase {
           id: true,
           createdAt: true,
           updatedAt: true,
+          address: true,
+          phone: true,
+          owner: true,
+          name: true,
         },
       });
     } catch (error) {
@@ -117,6 +142,10 @@ export class RestaurantControllerBase {
           id: true,
           createdAt: true,
           updatedAt: true,
+          address: true,
+          phone: true,
+          owner: true,
+          name: true,
         },
       });
     } catch (error) {
@@ -127,5 +156,265 @@ export class RestaurantControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.Get("/:id/menus")
+  @ApiNestedQuery(MenuFindManyArgs)
+  async findMenus(
+    @common.Req() request: Request,
+    @common.Param() params: RestaurantWhereUniqueInput
+  ): Promise<Menu[]> {
+    const query = plainToClass(MenuFindManyArgs, request.query);
+    const results = await this.service.findMenus(params.id, {
+      ...query,
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        itemName: true,
+        description: true,
+        price: true,
+
+        restaurant: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/menus")
+  async connectMenus(
+    @common.Param() params: RestaurantWhereUniqueInput,
+    @common.Body() body: MenuWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      menus: {
+        connect: body,
+      },
+    };
+    await this.service.updateRestaurant({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/menus")
+  async updateMenus(
+    @common.Param() params: RestaurantWhereUniqueInput,
+    @common.Body() body: MenuWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      menus: {
+        set: body,
+      },
+    };
+    await this.service.updateRestaurant({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/menus")
+  async disconnectMenus(
+    @common.Param() params: RestaurantWhereUniqueInput,
+    @common.Body() body: MenuWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      menus: {
+        disconnect: body,
+      },
+    };
+    await this.service.updateRestaurant({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Get("/:id/reviews")
+  @ApiNestedQuery(ReviewFindManyArgs)
+  async findReviews(
+    @common.Req() request: Request,
+    @common.Param() params: RestaurantWhereUniqueInput
+  ): Promise<Review[]> {
+    const query = plainToClass(ReviewFindManyArgs, request.query);
+    const results = await this.service.findReviews(params.id, {
+      ...query,
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        rating: true,
+        comment: true,
+
+        user: {
+          select: {
+            id: true,
+          },
+        },
+
+        restaurant: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/reviews")
+  async connectReviews(
+    @common.Param() params: RestaurantWhereUniqueInput,
+    @common.Body() body: ReviewWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      reviews: {
+        connect: body,
+      },
+    };
+    await this.service.updateRestaurant({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/reviews")
+  async updateReviews(
+    @common.Param() params: RestaurantWhereUniqueInput,
+    @common.Body() body: ReviewWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      reviews: {
+        set: body,
+      },
+    };
+    await this.service.updateRestaurant({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/reviews")
+  async disconnectReviews(
+    @common.Param() params: RestaurantWhereUniqueInput,
+    @common.Body() body: ReviewWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      reviews: {
+        disconnect: body,
+      },
+    };
+    await this.service.updateRestaurant({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Get("/:id/orders")
+  @ApiNestedQuery(OrderFindManyArgs)
+  async findOrders(
+    @common.Req() request: Request,
+    @common.Param() params: RestaurantWhereUniqueInput
+  ): Promise<Order[]> {
+    const query = plainToClass(OrderFindManyArgs, request.query);
+    const results = await this.service.findOrders(params.id, {
+      ...query,
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        orderDate: true,
+        totalAmount: true,
+        items: true,
+
+        user: {
+          select: {
+            id: true,
+          },
+        },
+
+        restaurant: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/orders")
+  async connectOrders(
+    @common.Param() params: RestaurantWhereUniqueInput,
+    @common.Body() body: OrderWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      orders: {
+        connect: body,
+      },
+    };
+    await this.service.updateRestaurant({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/orders")
+  async updateOrders(
+    @common.Param() params: RestaurantWhereUniqueInput,
+    @common.Body() body: OrderWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      orders: {
+        set: body,
+      },
+    };
+    await this.service.updateRestaurant({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/orders")
+  async disconnectOrders(
+    @common.Param() params: RestaurantWhereUniqueInput,
+    @common.Body() body: OrderWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      orders: {
+        disconnect: body,
+      },
+    };
+    await this.service.updateRestaurant({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 }

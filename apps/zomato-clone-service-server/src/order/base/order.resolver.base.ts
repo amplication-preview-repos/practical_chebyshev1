@@ -17,7 +17,11 @@ import { Order } from "./Order";
 import { OrderCountArgs } from "./OrderCountArgs";
 import { OrderFindManyArgs } from "./OrderFindManyArgs";
 import { OrderFindUniqueArgs } from "./OrderFindUniqueArgs";
+import { CreateOrderArgs } from "./CreateOrderArgs";
+import { UpdateOrderArgs } from "./UpdateOrderArgs";
 import { DeleteOrderArgs } from "./DeleteOrderArgs";
+import { User } from "../../user/base/User";
+import { Restaurant } from "../../restaurant/base/Restaurant";
 import { OrderService } from "../order.service";
 @graphql.Resolver(() => Order)
 export class OrderResolverBase {
@@ -49,6 +53,61 @@ export class OrderResolverBase {
   }
 
   @graphql.Mutation(() => Order)
+  async createOrder(@graphql.Args() args: CreateOrderArgs): Promise<Order> {
+    return await this.service.createOrder({
+      ...args,
+      data: {
+        ...args.data,
+
+        user: args.data.user
+          ? {
+              connect: args.data.user,
+            }
+          : undefined,
+
+        restaurant: args.data.restaurant
+          ? {
+              connect: args.data.restaurant,
+            }
+          : undefined,
+      },
+    });
+  }
+
+  @graphql.Mutation(() => Order)
+  async updateOrder(
+    @graphql.Args() args: UpdateOrderArgs
+  ): Promise<Order | null> {
+    try {
+      return await this.service.updateOrder({
+        ...args,
+        data: {
+          ...args.data,
+
+          user: args.data.user
+            ? {
+                connect: args.data.user,
+              }
+            : undefined,
+
+          restaurant: args.data.restaurant
+            ? {
+                connect: args.data.restaurant,
+              }
+            : undefined,
+        },
+      });
+    } catch (error) {
+      if (isRecordNotFoundError(error)) {
+        throw new GraphQLError(
+          `No resource was found for ${JSON.stringify(args.where)}`
+        );
+      }
+      throw error;
+    }
+  }
+
+  @graphql.Mutation(() => Order)
   async deleteOrder(
     @graphql.Args() args: DeleteOrderArgs
   ): Promise<Order | null> {
@@ -62,5 +121,33 @@ export class OrderResolverBase {
       }
       throw error;
     }
+  }
+
+  @graphql.ResolveField(() => User, {
+    nullable: true,
+    name: "user",
+  })
+  async getUser(@graphql.Parent() parent: Order): Promise<User | null> {
+    const result = await this.service.getUser(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
+  }
+
+  @graphql.ResolveField(() => Restaurant, {
+    nullable: true,
+    name: "restaurant",
+  })
+  async getRestaurant(
+    @graphql.Parent() parent: Order
+  ): Promise<Restaurant | null> {
+    const result = await this.service.getRestaurant(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

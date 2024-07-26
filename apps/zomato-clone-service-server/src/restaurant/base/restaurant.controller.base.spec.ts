@@ -21,23 +21,39 @@ const CREATE_INPUT = {
   id: "exampleId",
   createdAt: new Date(),
   updatedAt: new Date(),
+  address: "exampleAddress",
+  phone: "examplePhone",
+  owner: "exampleOwner",
+  name: "exampleName",
 };
 const CREATE_RESULT = {
   id: "exampleId",
   createdAt: new Date(),
   updatedAt: new Date(),
+  address: "exampleAddress",
+  phone: "examplePhone",
+  owner: "exampleOwner",
+  name: "exampleName",
 };
 const FIND_MANY_RESULT = [
   {
     id: "exampleId",
     createdAt: new Date(),
     updatedAt: new Date(),
+    address: "exampleAddress",
+    phone: "examplePhone",
+    owner: "exampleOwner",
+    name: "exampleName",
   },
 ];
 const FIND_ONE_RESULT = {
   id: "exampleId",
   createdAt: new Date(),
   updatedAt: new Date(),
+  address: "exampleAddress",
+  phone: "examplePhone",
+  owner: "exampleOwner",
+  name: "exampleName",
 };
 
 const service = {

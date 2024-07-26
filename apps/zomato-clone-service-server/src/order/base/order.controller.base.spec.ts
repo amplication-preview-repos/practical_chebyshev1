@@ -21,23 +21,31 @@ const CREATE_INPUT = {
   id: "exampleId",
   createdAt: new Date(),
   updatedAt: new Date(),
+  orderDate: new Date(),
+  totalAmount: 42.42,
 };
 const CREATE_RESULT = {
   id: "exampleId",
   createdAt: new Date(),
   updatedAt: new Date(),
+  orderDate: new Date(),
+  totalAmount: 42.42,
 };
 const FIND_MANY_RESULT = [
   {
     id: "exampleId",
     createdAt: new Date(),
     updatedAt: new Date(),
+    orderDate: new Date(),
+    totalAmount: 42.42,
   },
 ];
 const FIND_ONE_RESULT = {
   id: "exampleId",
   createdAt: new Date(),
   updatedAt: new Date(),
+  orderDate: new Date(),
+  totalAmount: 42.42,
 };
 
 const service = {
@@ -124,6 +132,7 @@ describe("Order", () => {
         ...CREATE_RESULT,
         createdAt: CREATE_RESULT.createdAt.toISOString(),
         updatedAt: CREATE_RESULT.updatedAt.toISOString(),
+        orderDate: CREATE_RESULT.orderDate.toISOString(),
       });
   });
 
@@ -136,6 +145,7 @@ describe("Order", () => {
           ...FIND_MANY_RESULT[0],
           createdAt: FIND_MANY_RESULT[0].createdAt.toISOString(),
           updatedAt: FIND_MANY_RESULT[0].updatedAt.toISOString(),
+          orderDate: FIND_MANY_RESULT[0].orderDate.toISOString(),
         },
       ]);
   });
@@ -159,6 +169,7 @@ describe("Order", () => {
         ...FIND_ONE_RESULT,
         createdAt: FIND_ONE_RESULT.createdAt.toISOString(),
         updatedAt: FIND_ONE_RESULT.updatedAt.toISOString(),
+        orderDate: FIND_ONE_RESULT.orderDate.toISOString(),
       });
   });
 
@@ -172,6 +183,7 @@ describe("Order", () => {
         ...CREATE_RESULT,
         createdAt: CREATE_RESULT.createdAt.toISOString(),
         updatedAt: CREATE_RESULT.updatedAt.toISOString(),
+        orderDate: CREATE_RESULT.orderDate.toISOString(),
       })
       .then(function () {
         agent

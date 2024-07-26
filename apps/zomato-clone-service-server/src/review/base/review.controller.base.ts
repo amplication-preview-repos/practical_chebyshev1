@@ -29,11 +29,39 @@ export class ReviewControllerBase {
   @swagger.ApiCreatedResponse({ type: Review })
   async createReview(@common.Body() data: ReviewCreateInput): Promise<Review> {
     return await this.service.createReview({
-      data: data,
+      data: {
+        ...data,
+
+        user: data.user
+          ? {
+              connect: data.user,
+            }
+          : undefined,
+
+        restaurant: data.restaurant
+          ? {
+              connect: data.restaurant,
+            }
+          : undefined,
+      },
       select: {
         id: true,
         createdAt: true,
         updatedAt: true,
+        rating: true,
+        comment: true,
+
+        user: {
+          select: {
+            id: true,
+          },
+        },
+
+        restaurant: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
   }
@@ -49,6 +77,20 @@ export class ReviewControllerBase {
         id: true,
         createdAt: true,
         updatedAt: true,
+        rating: true,
+        comment: true,
+
+        user: {
+          select: {
+            id: true,
+          },
+        },
+
+        restaurant: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
   }
@@ -65,6 +107,20 @@ export class ReviewControllerBase {
         id: true,
         createdAt: true,
         updatedAt: true,
+        rating: true,
+        comment: true,
+
+        user: {
+          select: {
+            id: true,
+          },
+        },
+
+        restaurant: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
     if (result === null) {
@@ -85,11 +141,39 @@ export class ReviewControllerBase {
     try {
       return await this.service.updateReview({
         where: params,
-        data: data,
+        data: {
+          ...data,
+
+          user: data.user
+            ? {
+                connect: data.user,
+              }
+            : undefined,
+
+          restaurant: data.restaurant
+            ? {
+                connect: data.restaurant,
+              }
+            : undefined,
+        },
         select: {
           id: true,
           createdAt: true,
           updatedAt: true,
+          rating: true,
+          comment: true,
+
+          user: {
+            select: {
+              id: true,
+            },
+          },
+
+          restaurant: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
     } catch (error) {
@@ -115,6 +199,20 @@ export class ReviewControllerBase {
           id: true,
           createdAt: true,
           updatedAt: true,
+          rating: true,
+          comment: true,
+
+          user: {
+            select: {
+              id: true,
+            },
+          },
+
+          restaurant: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
     } catch (error) {

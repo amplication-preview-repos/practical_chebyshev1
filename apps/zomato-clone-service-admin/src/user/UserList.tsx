@@ -1,5 +1,12 @@
 import * as React from "react";
-import { List, Datagrid, ListProps, TextField, DateField } from "react-admin";
+import {
+  List,
+  Datagrid,
+  ListProps,
+  TextField,
+  DateField,
+  BooleanField,
+} from "react-admin";
 import Pagination from "../Components/Pagination";
 
 export const UserList = (props: ListProps): React.ReactElement => {
@@ -20,6 +27,7 @@ export const UserList = (props: ListProps): React.ReactElement => {
         <TextField label="Username" source="username" />
         <TextField label="Email" source="email" />
         <TextField label="Roles" source="roles" />
+        <BooleanField label="isAdmin" source="isAdmin" />
       </Datagrid>
     </List>
   );

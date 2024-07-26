@@ -15,6 +15,10 @@ export const RestaurantList = (props: ListProps): React.ReactElement => {
         <TextField label="ID" source="id" />
         <DateField source="createdAt" label="Created At" />
         <DateField source="updatedAt" label="Updated At" />
+        <TextField label="address" source="address" />
+        <TextField label="phone" source="phone" />
+        <TextField label="owner" source="owner" />
+        <TextField label="name" source="name" />
       </Datagrid>
     </List>
   );

@@ -17,7 +17,11 @@ import { Review } from "./Review";
 import { ReviewCountArgs } from "./ReviewCountArgs";
 import { ReviewFindManyArgs } from "./ReviewFindManyArgs";
 import { ReviewFindUniqueArgs } from "./ReviewFindUniqueArgs";
+import { CreateReviewArgs } from "./CreateReviewArgs";
+import { UpdateReviewArgs } from "./UpdateReviewArgs";
 import { DeleteReviewArgs } from "./DeleteReviewArgs";
+import { User } from "../../user/base/User";
+import { Restaurant } from "../../restaurant/base/Restaurant";
 import { ReviewService } from "../review.service";
 @graphql.Resolver(() => Review)
 export class ReviewResolverBase {
@@ -49,6 +53,61 @@ export class ReviewResolverBase {
   }
 
   @graphql.Mutation(() => Review)
+  async createReview(@graphql.Args() args: CreateReviewArgs): Promise<Review> {
+    return await this.service.createReview({
+      ...args,
+      data: {
+        ...args.data,
+
+        user: args.data.user
+          ? {
+              connect: args.data.user,
+            }
+          : undefined,
+
+        restaurant: args.data.restaurant
+          ? {
+              connect: args.data.restaurant,
+            }
+          : undefined,
+      },
+    });
+  }
+
+  @graphql.Mutation(() => Review)
+  async updateReview(
+    @graphql.Args() args: UpdateReviewArgs
+  ): Promise<Review | null> {
+    try {
+      return await this.service.updateReview({
+        ...args,
+        data: {
+          ...args.data,
+
+          user: args.data.user
+            ? {
+                connect: args.data.user,
+              }
+            : undefined,
+
+          restaurant: args.data.restaurant
+            ? {
+                connect: args.data.restaurant,
+              }
+            : undefined,
+        },
+      });
+    } catch (error) {
+      if (isRecordNotFoundError(error)) {
+        throw new GraphQLError(
+          `No resource was found for ${JSON.stringify(args.where)}`
+        );
+      }
+      throw error;
+    }
+  }
+
+  @graphql.Mutation(() => Review)
   async deleteReview(
     @graphql.Args() args: DeleteReviewArgs
   ): Promise<Review | null> {
@@ -62,5 +121,33 @@ export class ReviewResolverBase {
       }
       throw error;
     }
+  }
+
+  @graphql.ResolveField(() => User, {
+    nullable: true,
+    name: "user",
+  })
+  async getUser(@graphql.Parent() parent: Review): Promise<User | null> {
+    const result = await this.service.getUser(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
+  }
+
+  @graphql.ResolveField(() => Restaurant, {
+    nullable: true,
+    name: "restaurant",
+  })
+  async getRestaurant(
+    @graphql.Parent() parent: Review
+  ): Promise<Restaurant | null> {
+    const result = await this.service.getRestaurant(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

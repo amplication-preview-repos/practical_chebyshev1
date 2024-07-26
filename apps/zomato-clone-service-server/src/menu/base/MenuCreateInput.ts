@@ -9,5 +9,70 @@ https://docs.amplication.com/how-to/custom-code
 
 ------------------------------------------------------------------------------
   */
-class MenuCreateInput {}
+import { InputType, Field } from "@nestjs/graphql";
+import { ApiProperty } from "@nestjs/swagger";
+import {
+  IsString,
+  MaxLength,
+  IsOptional,
+  IsNumber,
+  Min,
+  Max,
+  ValidateNested,
+} from "class-validator";
+import { RestaurantWhereUniqueInput } from "../../restaurant/base/RestaurantWhereUniqueInput";
+import { Type } from "class-transformer";
+
+@InputType()
+class MenuCreateInput {
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  itemName?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  description?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: Number,
+  })
+  @IsNumber()
+  @Min(-999999999)
+  @Max(999999999)
+  @IsOptional()
+  @Field(() => Number, {
+    nullable: true,
+  })
+  price?: number | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => RestaurantWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => RestaurantWhereUniqueInput)
+  @IsOptional()
+  @Field(() => RestaurantWhereUniqueInput, {
+    nullable: true,
+  })
+  restaurant?: RestaurantWhereUniqueInput | null;
+}
+
 export { MenuCreateInput as MenuCreateInput };

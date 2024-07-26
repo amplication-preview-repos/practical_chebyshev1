@@ -9,5 +9,104 @@ https://docs.amplication.com/how-to/custom-code
 
 ------------------------------------------------------------------------------
   */
-class RestaurantUpdateInput {}
+import { InputType, Field } from "@nestjs/graphql";
+import { ApiProperty } from "@nestjs/swagger";
+import {
+  IsString,
+  MaxLength,
+  IsOptional,
+  ValidateNested,
+} from "class-validator";
+import { MenuUpdateManyWithoutRestaurantsInput } from "./MenuUpdateManyWithoutRestaurantsInput";
+import { Type } from "class-transformer";
+import { ReviewUpdateManyWithoutRestaurantsInput } from "./ReviewUpdateManyWithoutRestaurantsInput";
+import { OrderUpdateManyWithoutRestaurantsInput } from "./OrderUpdateManyWithoutRestaurantsInput";
+
+@InputType()
+class RestaurantUpdateInput {
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  address?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  phone?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  owner?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  name?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => MenuUpdateManyWithoutRestaurantsInput,
+  })
+  @ValidateNested()
+  @Type(() => MenuUpdateManyWithoutRestaurantsInput)
+  @IsOptional()
+  @Field(() => MenuUpdateManyWithoutRestaurantsInput, {
+    nullable: true,
+  })
+  menus?: MenuUpdateManyWithoutRestaurantsInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => ReviewUpdateManyWithoutRestaurantsInput,
+  })
+  @ValidateNested()
+  @Type(() => ReviewUpdateManyWithoutRestaurantsInput)
+  @IsOptional()
+  @Field(() => ReviewUpdateManyWithoutRestaurantsInput, {
+    nullable: true,
+  })
+  reviews?: ReviewUpdateManyWithoutRestaurantsInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => OrderUpdateManyWithoutRestaurantsInput,
+  })
+  @ValidateNested()
+  @Type(() => OrderUpdateManyWithoutRestaurantsInput)
+  @IsOptional()
+  @Field(() => OrderUpdateManyWithoutRestaurantsInput, {
+    nullable: true,
+  })
+  orders?: OrderUpdateManyWithoutRestaurantsInput;
+}
+
 export { RestaurantUpdateInput as RestaurantUpdateInput };

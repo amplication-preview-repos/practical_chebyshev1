@@ -17,7 +17,10 @@ import { Menu } from "./Menu";
 import { MenuCountArgs } from "./MenuCountArgs";
 import { MenuFindManyArgs } from "./MenuFindManyArgs";
 import { MenuFindUniqueArgs } from "./MenuFindUniqueArgs";
+import { CreateMenuArgs } from "./CreateMenuArgs";
+import { UpdateMenuArgs } from "./UpdateMenuArgs";
 import { DeleteMenuArgs } from "./DeleteMenuArgs";
+import { Restaurant } from "../../restaurant/base/Restaurant";
 import { MenuService } from "../menu.service";
 @graphql.Resolver(() => Menu)
 export class MenuResolverBase {
@@ -47,6 +50,47 @@ export class MenuResolverBase {
   }
 
   @graphql.Mutation(() => Menu)
+  async createMenu(@graphql.Args() args: CreateMenuArgs): Promise<Menu> {
+    return await this.service.createMenu({
+      ...args,
+      data: {
+        ...args.data,
+
+        restaurant: args.data.restaurant
+          ? {
+              connect: args.data.restaurant,
+            }
+          : undefined,
+      },
+    });
+  }
+
+  @graphql.Mutation(() => Menu)
+  async updateMenu(@graphql.Args() args: UpdateMenuArgs): Promise<Menu | null> {
+    try {
+      return await this.service.updateMenu({
+        ...args,
+        data: {
+          ...args.data,
+
+          restaurant: args.data.restaurant
+            ? {
+                connect: args.data.restaurant,
+              }
+            : undefined,
+        },
+      });
+    } catch (error) {
+      if (isRecordNotFoundError(error)) {
+        throw new GraphQLError(
+          `No resource was found for ${JSON.stringify(args.where)}`
+        );
+      }
+      throw error;
+    }
+  }
+
+  @graphql.Mutation(() => Menu)
   async deleteMenu(@graphql.Args() args: DeleteMenuArgs): Promise<Menu | null> {
     try {
       return await this.service.deleteMenu(args);
@@ -58,5 +102,20 @@ export class MenuResolverBase {
       }
       throw error;
     }
+  }
+
+  @graphql.ResolveField(() => Restaurant, {
+    nullable: true,
+    name: "restaurant",
+  })
+  async getRestaurant(
+    @graphql.Parent() parent: Menu
+  ): Promise<Restaurant | null> {
+    const result = await this.service.getRestaurant(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

@@ -10,7 +10,14 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, Restaurant as PrismaRestaurant } from "@prisma/client";
+
+import {
+  Prisma,
+  Restaurant as PrismaRestaurant,
+  Menu as PrismaMenu,
+  Review as PrismaReview,
+  Order as PrismaOrder,
+} from "@prisma/client";
 
 export class RestaurantServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -45,5 +52,38 @@ export class RestaurantServiceBase {
     args: Prisma.RestaurantDeleteArgs
   ): Promise<PrismaRestaurant> {
     return this.prisma.restaurant.delete(args);
+  }
+
+  async findMenus(
+    parentId: string,
+    args: Prisma.MenuFindManyArgs
+  ): Promise<PrismaMenu[]> {
+    return this.prisma.restaurant
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .menus(args);
+  }
+
+  async findReviews(
+    parentId: string,
+    args: Prisma.ReviewFindManyArgs
+  ): Promise<PrismaReview[]> {
+    return this.prisma.restaurant
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .reviews(args);
+  }
+
+  async findOrders(
+    parentId: string,
+    args: Prisma.OrderFindManyArgs
+  ): Promise<PrismaOrder[]> {
+    return this.prisma.restaurant
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .orders(args);
   }
 }

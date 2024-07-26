@@ -10,7 +10,11 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, Menu as PrismaMenu } from "@prisma/client";
+import {
+  Prisma,
+  Menu as PrismaMenu,
+  Restaurant as PrismaRestaurant,
+} from "@prisma/client";
 
 export class MenuServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -33,5 +37,13 @@ export class MenuServiceBase {
   }
   async deleteMenu(args: Prisma.MenuDeleteArgs): Promise<PrismaMenu> {
     return this.prisma.menu.delete(args);
+  }
+
+  async getRestaurant(parentId: string): Promise<PrismaRestaurant | null> {
+    return this.prisma.menu
+      .findUnique({
+        where: { id: parentId },
+      })
+      .restaurant();
   }
 }

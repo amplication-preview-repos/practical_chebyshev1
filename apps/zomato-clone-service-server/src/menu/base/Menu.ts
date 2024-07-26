@@ -11,8 +11,20 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsDate } from "class-validator";
+
+import {
+  IsString,
+  IsDate,
+  MaxLength,
+  IsOptional,
+  IsNumber,
+  Min,
+  Max,
+  ValidateNested,
+} from "class-validator";
+
 import { Type } from "class-transformer";
+import { Restaurant } from "../../restaurant/base/Restaurant";
 
 @ObjectType()
 class Menu {
@@ -39,6 +51,52 @@ class Menu {
   @Type(() => Date)
   @Field(() => Date)
   updatedAt!: Date;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  itemName!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  description!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: Number,
+  })
+  @IsNumber()
+  @Min(-999999999)
+  @Max(999999999)
+  @IsOptional()
+  @Field(() => Number, {
+    nullable: true,
+  })
+  price!: number | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => Restaurant,
+  })
+  @ValidateNested()
+  @Type(() => Restaurant)
+  @IsOptional()
+  restaurant?: Restaurant | null;
 }
 
 export { Menu as Menu };

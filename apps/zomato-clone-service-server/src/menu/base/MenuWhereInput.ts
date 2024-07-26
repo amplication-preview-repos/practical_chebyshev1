@@ -13,7 +13,10 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
+import { StringNullableFilter } from "../../util/StringNullableFilter";
+import { FloatNullableFilter } from "../../util/FloatNullableFilter";
+import { RestaurantWhereUniqueInput } from "../../restaurant/base/RestaurantWhereUniqueInput";
 
 @InputType()
 class MenuWhereInput {
@@ -27,6 +30,51 @@ class MenuWhereInput {
     nullable: true,
   })
   id?: StringFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  itemName?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  description?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: FloatNullableFilter,
+  })
+  @Type(() => FloatNullableFilter)
+  @IsOptional()
+  @Field(() => FloatNullableFilter, {
+    nullable: true,
+  })
+  price?: FloatNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => RestaurantWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => RestaurantWhereUniqueInput)
+  @IsOptional()
+  @Field(() => RestaurantWhereUniqueInput, {
+    nullable: true,
+  })
+  restaurant?: RestaurantWhereUniqueInput;
 }
 
 export { MenuWhereInput as MenuWhereInput };

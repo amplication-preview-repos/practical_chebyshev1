@@ -29,11 +29,40 @@ export class OrderControllerBase {
   @swagger.ApiCreatedResponse({ type: Order })
   async createOrder(@common.Body() data: OrderCreateInput): Promise<Order> {
     return await this.service.createOrder({
-      data: data,
+      data: {
+        ...data,
+
+        user: data.user
+          ? {
+              connect: data.user,
+            }
+          : undefined,
+
+        restaurant: data.restaurant
+          ? {
+              connect: data.restaurant,
+            }
+          : undefined,
+      },
       select: {
         id: true,
         createdAt: true,
         updatedAt: true,
+        orderDate: true,
+        totalAmount: true,
+        items: true,
+
+        user: {
+          select: {
+            id: true,
+          },
+        },
+
+        restaurant: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
   }
@@ -49,6 +78,21 @@ export class OrderControllerBase {
         id: true,
         createdAt: true,
         updatedAt: true,
+        orderDate: true,
+        totalAmount: true,
+        items: true,
+
+        user: {
+          select: {
+            id: true,
+          },
+        },
+
+        restaurant: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
   }
@@ -65,6 +109,21 @@ export class OrderControllerBase {
         id: true,
         createdAt: true,
         updatedAt: true,
+        orderDate: true,
+        totalAmount: true,
+        items: true,
+
+        user: {
+          select: {
+            id: true,
+          },
+        },
+
+        restaurant: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
     if (result === null) {
@@ -85,11 +144,40 @@ export class OrderControllerBase {
     try {
       return await this.service.updateOrder({
         where: params,
-        data: data,
+        data: {
+          ...data,
+
+          user: data.user
+            ? {
+                connect: data.user,
+              }
+            : undefined,
+
+          restaurant: data.restaurant
+            ? {
+                connect: data.restaurant,
+              }
+            : undefined,
+        },
         select: {
           id: true,
           createdAt: true,
           updatedAt: true,
+          orderDate: true,
+          totalAmount: true,
+          items: true,
+
+          user: {
+            select: {
+              id: true,
+            },
+          },
+
+          restaurant: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
     } catch (error) {
@@ -115,6 +203,21 @@ export class OrderControllerBase {
           id: true,
           createdAt: true,
           updatedAt: true,
+          orderDate: true,
+          totalAmount: true,
+          items: true,
+
+          user: {
+            select: {
+              id: true,
+            },
+          },
+
+          restaurant: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
     } catch (error) {

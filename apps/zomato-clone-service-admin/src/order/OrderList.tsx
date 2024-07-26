@@ -1,6 +1,15 @@
 import * as React from "react";
-import { List, Datagrid, ListProps, TextField, DateField } from "react-admin";
+import {
+  List,
+  Datagrid,
+  ListProps,
+  TextField,
+  DateField,
+  ReferenceField,
+} from "react-admin";
 import Pagination from "../Components/Pagination";
+import { USER_TITLE_FIELD } from "../user/UserTitle";
+import { RESTAURANT_TITLE_FIELD } from "../restaurant/RestaurantTitle";
 
 export const OrderList = (props: ListProps): React.ReactElement => {
   return (
@@ -15,6 +24,19 @@ export const OrderList = (props: ListProps): React.ReactElement => {
         <TextField label="ID" source="id" />
         <DateField source="createdAt" label="Created At" />
         <DateField source="updatedAt" label="Updated At" />
+        <TextField label="orderDate" source="orderDate" />
+        <TextField label="totalAmount" source="totalAmount" />
+        <TextField label="items" source="items" />
+        <ReferenceField label="user" source="user.id" reference="User">
+          <TextField source={USER_TITLE_FIELD} />
+        </ReferenceField>
+        <ReferenceField
+          label="restaurant"
+          source="restaurant.id"
+          reference="Restaurant"
+        >
+          <TextField source={RESTAURANT_TITLE_FIELD} />
+        </ReferenceField>
       </Datagrid>
     </List>
   );
